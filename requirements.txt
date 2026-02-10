@@ -4,9 +4,6 @@ google-generativeai
 streamlit-lottie
 PyPDF2
 python-dotenv
-
-requestsstreamlit
-streamlit-option-menu
-google-generativeai
-PyPDF2
+requests
 pandas
+
