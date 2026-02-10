@@ -1,169 +1,194 @@
 import streamlit as st
 import time
 from streamlit_option_menu import option_menu
+import json
 
-# 1. PAGE CONFIGURATION (Must be the first line)
+# 1. PAGE CONFIGURATION
 st.set_page_config(
-    page_title="Global Scholar AI",
-    page_icon="🎓",
+    page_title="Global Scholar AI 2.0",
+    page_icon="🚀",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 2. CUSTOM CSS (Styling & Animations)
+# 2. ULTRA MODERN CSS & ANIMATIONS
 st.markdown("""
 <style>
-    /* মেইন ব্যাকগ্রাউন্ড এবং টেক্সট কালার */
+    /* Dark Theme Background */
     .stApp {
-        background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+        background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
         color: white;
     }
     
-    /* ইন্ট্রো অ্যানিমেশন স্টাইল */
-    .intro-container {
+    /* --- CINEMATIC INTRO ANIMATION --- */
+    .hero-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 60vh;
+        height: 70vh;
         flex-direction: column;
     }
     
-    .intro-text {
-        font-size: 70px;
-        font-weight: 800;
-        background: -webkit-linear-gradient(45deg, #00C9FF, #92FE9D);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: glow 1.5s ease-in-out infinite alternate;
-        text-align: center;
+    .neon-text {
+        font-size: 80px;
+        font-weight: 900;
+        color: #fff;
+        text-transform: uppercase;
+        animation: flicker 1.5s infinite alternate;
+        text-shadow: 
+            0 0 7px #fff,
+            0 0 10px #fff,
+            0 0 21px #fff,
+            0 0 42px #0fa,
+            0 0 82px #0fa,
+            0 0 92px #0fa,
+            0 0 102px #0fa,
+            0 0 151px #0fa;
     }
     
-    .sub-intro {
-        font-size: 25px;
-        color: #ddd;
-        margin-top: 10px;
-        font-family: 'Courier New', Courier, monospace;
+    @keyframes flicker {
+        0%, 18%, 22%, 25%, 53%, 57%, 100% {
+            text-shadow:
+            0 0 4px #fff,
+            0 0 11px #fff,
+            0 0 19px #fff,
+            0 0 40px #0fa,
+            0 0 80px #0fa,
+            0 0 90px #0fa,
+            0 0 100px #0fa,
+            0 0 150px #0fa;
+        }
+        20%, 24%, 55% {       
+            text-shadow: none;
+        }
     }
 
-    @keyframes glow {
-        from { text-shadow: 0 0 10px #00C9FF, 0 0 20px #00C9FF; }
-        to { text-shadow: 0 0 20px #92FE9D, 0 0 30px #92FE9D; }
+    /* --- TAB DESIGN --- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 2px;
+        background-color: #0e1117;
+        padding: 10px;
+        border-radius: 10px;
     }
-
-    /* রিমুভ ডিফল্ট এলিমেন্টস */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        background-color: transparent;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #00C9FF;
+        color: black;
+    }
     
 </style>
 """, unsafe_allow_html=True)
 
-# 3. INTRO ANIMATION FUNCTION
-def run_intro_animation():
+# 3. INTRO ANIMATION FUNCTION (Only once per session)
+def show_intro():
     placeholder = st.empty()
-    
     with placeholder.container():
-        st.markdown("""
-        <div class="intro-container">
-            <h1 class="intro-text">Created by Future World</h1>
-            <p class="sub-intro">Loading AI Modules...</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="hero-container"><h1 class="neon-text">FUTURE WORLD</h1></div>', unsafe_allow_html=True)
+        time.sleep(2.5) # অ্যানিমেশন ডিউরেশন
         
-        # প্রোগ্রেস বার
-        progress_bar = st.progress(0)
-        for percent_complete in range(100):
-            time.sleep(0.01) # অ্যানিমেশন স্পিড
-            progress_bar.progress(percent_complete + 1)
-            
-        time.sleep(0.5)
-        
-    placeholder.empty() # অ্যানিমেশন শেষ হলে স্ক্রিন ক্লিয়ার
+    placeholder.empty()
 
-# সেশন স্টেট চেক (যাতে অ্যানিমেশন একবারই হয়)
-if 'animation_shown' not in st.session_state:
-    run_intro_animation()
-    st.session_state['animation_shown'] = True
+if 'intro_done' not in st.session_state:
+    show_intro()
+    st.session_state['intro_done'] = True
 
-# 4. TOP NAVIGATION MENU (Horizontal)
+# 4. NAVIGATION MENU (Updated & Merged)
 selected = option_menu(
     menu_title=None,
-    options=["Home", "Universe Explorer", "Smart Study Buddy", "Budget Planner"],
-    icons=["house-fill", "globe", "book-half", "wallet2"],
-    menu_icon="cast",
+    options=["Home", "Academic Hub", "Global Wings", "Career Architect"],
+    icons=["house", "journal-code", "airplane-engines", "diagram-3"],
     default_index=0,
     orientation="horizontal",
     styles={
-        "container": {"padding": "0!important", "background-color": "transparent"},
-        "icon": {"color": "#00C9FF", "font-size": "20px"}, 
-        "nav-link": {
-            "font-size": "16px", 
-            "text-align": "center", 
-            "margin": "0px 10px", 
-            "color": "white",
-            "font-weight": "bold"
-        },
-        "nav-link-selected": {"background-color": "#00C9FF", "color": "white"},
+        "container": {"padding": "5px", "background-color": "#161b22"},
+        "nav-link": {"font-size": "14px", "text-align": "center", "margin": "0px", "color": "#ddd"},
+        "nav-link-selected": {"background-color": "#00C9FF", "color": "black", "font-weight": "bold"},
     }
 )
 
-# 5. PAGE CONTENT LOGIC
+# 5. MAIN LOGIC
 
-# --- HOME PAGE ---
+# --- HOME ---
 if selected == "Home":
-    st.markdown("<h1 style='text-align: center; color: white;'>Welcome to Global Scholar AI 🎓</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: #a8b2d1;'>আপনার স্বপ্নের উচ্চশিক্ষার পথে বিশ্বস্ত সঙ্গী</h3>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #00C9FF;'>Welcome to Global Scholar AI 2.0 🎓</h1>", unsafe_allow_html=True)
+    st.write("---")
     
-    st.divider()
-    
-    col1, col2 = st.columns([1, 1], gap="large")
-    
+    col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown("""
-        ### 🚀 কেন এই অ্যাপ?
-        এই AI-Powered অ্যাপটি স্টুডেন্টদের জন্য তৈরি, যা বিদেশে উচ্চশিক্ষার প্রতিটি ধাপ সহজ করে দেয়।
-        
-        **ফিচারসমূহ:**
-        * 🌍 **Universe Explorer:** বিশ্বের সেরা ইউনিভার্সিটিগুলো খুঁজুন।
-        * 📚 **Smart Study Buddy:** কঠিন পড়া সহজে বুঝুন AI-এর সাহায্যে।
-        * 💰 **Budget Planner:** টিউশন ফি এবং লিভিং কস্টের হিসাব রাখুন।
-        """)
-        
-        if st.button("Explore Now ->"):
-            st.toast("উপরের মেনু থেকে Universe Explorer সিলেক্ট করুন!")
-
+        st.info("📚 **Academic Hub**")
+        st.caption("আপনার পার্সোনাল টিউটর। নোটস আপলোড করুন, কুইজ দিন।")
     with col2:
-        # এখানে একটি ডামি ইমেজ বা Lottie অ্যানিমেশন দেওয়া হলো
-        st.image("https://cdn.dribbble.com/users/466602/screenshots/14104085/media/3c2a6d71343729938d87635c10202682.png", use_container_width=True)
+        st.success("✈️ **Global Wings**")
+        st.caption("বিদেশ যাত্রা ও বাজেট প্ল্যানিং এখন এক ছাতার নিচে।")
+    with col3:
+        st.warning("🚀 **Career Architect**")
+        st.caption("AI আপনাকে বলে দেবে আপনার ক্যারিয়ারের রোডম্যাপ।")
 
-# --- UNIVERSE EXPLORER ---
-elif selected == "Universe Explorer":
-    st.title("🌍 Universe Explorer")
-    st.info("AI দিয়ে বিশ্বের যেকোনো দেশের ইউনিভার্সিটি এবং স্কলারশিপ খুঁজুন।")
+# --- ACADEMIC HUB (Study Buddy + Quiz Merged) ---
+elif selected == "Academic Hub":
+    st.title("📚 Academic Hub")
     
-    search_query = st.text_input("কোন দেশে পড়তে যেতে চান?", placeholder="Example: Canada, Germany, USA...")
-    if search_query:
-        st.write(f"🔍 **{search_query}** এর জন্য সেরা ইউনিভার্সিটিগুলো খোঁজা হচ্ছে... (Backend Logic will be added soon)")
+    tab1, tab2 = st.tabs(["📄 Study Material Analyzer", "🧠 AI Quiz Master"])
+    
+    with tab1:
+        st.subheader("Upload PDF & Understand Instantly")
+        uploaded_file = st.file_uploader("নোটস বা বই আপলোড করুন", type="pdf")
+        if uploaded_file:
+            st.success("AI ফাইলটি পড়ছে... (Backend Integration Pending)")
+            
+    with tab2:
+        st.subheader("Test Your Knowledge")
+        topic = st.text_input("কোন টপিকের ওপর পরীক্ষা দিতে চান?")
+        if st.button("Generate Quiz"):
+            st.write(f"Generating quiz for: **{topic}**...")
 
-# --- SMART STUDY BUDDY ---
-elif selected == "Smart Study Buddy":
-    st.title("📚 Smart Study Buddy")
-    st.warning("আপনার পিডিএফ আপলোড করুন, AI আপনাকে কুইজ এবং সামারি দেবে।")
+# --- GLOBAL WINGS (Universe Explorer + Budget Merged) ---
+elif selected == "Global Wings":
+    st.title("✈️ Global Wings")
     
-    uploaded_file = st.file_uploader("Upload your Study Material (PDF)", type="pdf")
-    if uploaded_file is not None:
-        st.success("ফাইল আপলোড হয়েছে! AI এখন এটি বিশ্লেষণ করছে...")
-
-# --- BUDGET PLANNER ---
-elif selected == "Budget Planner":
-    st.title("💰 Budget Planner")
-    st.write("বিদেশে পড়ার এবং থাকার খরচের রিয়েল-টাইম হিসাব।")
+    tab1, tab2 = st.tabs(["🌍 Universe Explorer", "💰 Smart Budget"])
     
-    col1, col2 = st.columns(2)
-    with col1:
-        tuition = st.number_input("বার্ষিক টিউশন ফি ($)", min_value=0)
-    with col2:
-        living = st.number_input("মাসিক থাকা-খাওয়ার খরচ ($)", min_value=0)
-        
-    if st.button("Total Cost Calculate"):
+    with tab1:
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            country = st.text_input("Destination Country", placeholder="e.g. Germany")
+        with col2:
+            st.write("")
+            st.write("")
+            st.button("Search Unis 🔍")
+            
+    with tab2:
+        st.write("### Expense Calculator")
+        tuition = st.slider("Yearly Tuition ($)", 0, 50000, 10000)
+        living = st.slider("Monthly Living Cost ($)", 0, 3000, 800)
         total = tuition + (living * 12)
-        st.metric(label="এক বছরের মোট খরচ", value=f"${total}")
+        st.metric("Total Yearly Cost", f"${total}")
+        st.progress(min(total/60000, 1.0))
+
+# --- CAREER ARCHITECT (New AI Feature) ---
+elif selected == "Career Architect":
+    st.title("🚀 Career Architect AI")
+    st.write("আপনার স্বপ্নের জব রোলের জন্য কমপ্লিট গাইডলাইন নিন।")
+    
+    target_role = st.selectbox("আপনার লক্ষ্য কী?", ["Software Engineer", "Data Scientist", "Product Manager", "Digital Marketer"])
+    current_level = st.select_slider("আপনার বর্তমান অবস্থা:", options=["Beginner", "Intermediate", "Advanced"])
+    
+    if st.button("Generate Roadmap 🗺️"):
+        with st.spinner("AI রোডম্যাপ তৈরি করছে..."):
+            time.sleep(2)
+            st.subheader(f"Roadmap for {target_role} ({current_level})")
+            
+            # Simulated AI Response
+            st.markdown(f"""
+            1. **Month 1-2:** Master the basics of {target_role}.
+            2. **Month 3:** Build 2 real-world projects.
+            3. **Month 4:** Focus on Networking & LinkedIn optimization.
+            4. **Month 5:** Apply for Internships.
+            """)
+            st.balloons()
