@@ -1,12 +1,11 @@
 import streamlit as st
 import time
 from streamlit_option_menu import option_menu
-import json
 
 # 1. PAGE CONFIGURATION
 st.set_page_config(
-    page_title="Global Scholar AI 2.0",
-    page_icon="🚀",
+    page_title="Global Scholar AI",
+    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -25,42 +24,49 @@ st.markdown("""
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 70vh;
+        height: 80vh; /* Full screen height */
         flex-direction: column;
+        animation: fadeIn 3s ease-in;
     }
     
+    /* নাম (MD NAHID MAHMUD) এর স্টাইল */
     .neon-text {
-        font-size: 80px;
+        font-size: 70px;
         font-weight: 900;
         color: #fff;
         text-transform: uppercase;
-        animation: flicker 1.5s infinite alternate;
+        text-align: center;
+        margin-bottom: 0px;
         text-shadow: 
             0 0 7px #fff,
             0 0 10px #fff,
             0 0 21px #fff,
-            0 0 42px #0fa,
-            0 0 82px #0fa,
-            0 0 92px #0fa,
-            0 0 102px #0fa,
-            0 0 151px #0fa;
+            0 0 42px #00C9FF,
+            0 0 82px #00C9FF,
+            0 0 92px #00C9FF;
+        animation: glow 2s infinite alternate;
+    }
+
+    /* ভার্সিটির নাম (SOUTHEAST UNIVERSITY) এর স্টাইল */
+    .sub-text {
+        font-size: 30px;
+        color: #b0c4de;
+        margin-top: 15px;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-weight: bold;
+        text-shadow: 0 0 5px #b0c4de;
     }
     
-    @keyframes flicker {
-        0%, 18%, 22%, 25%, 53%, 57%, 100% {
-            text-shadow:
-            0 0 4px #fff,
-            0 0 11px #fff,
-            0 0 19px #fff,
-            0 0 40px #0fa,
-            0 0 80px #0fa,
-            0 0 90px #0fa,
-            0 0 100px #0fa,
-            0 0 150px #0fa;
-        }
-        20%, 24%, 55% {       
-            text-shadow: none;
-        }
+    @keyframes glow {
+        from { text-shadow: 0 0 10px #00C9FF, 0 0 20px #00C9FF; }
+        to { text-shadow: 0 0 20px #92FE9D, 0 0 30px #92FE9D; }
+    }
+    
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
     }
 
     /* --- TAB DESIGN --- */
@@ -85,20 +91,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# 3. INTRO ANIMATION FUNCTION (Only once per session)
+# 3. INTRO ANIMATION FUNCTION
 def show_intro():
     placeholder = st.empty()
     with placeholder.container():
-        st.markdown('<div class="hero-container"><h1 class="neon-text">FUTURE WORLD</h1></div>', unsafe_allow_html=True)
-        time.sleep(2.5) # অ্যানিমেশন ডিউরেশন
+        # এখানে আপনার নাম এবং ভার্সিটির নাম বসানো হলো
+        st.markdown("""
+        <div class="hero-container">
+            <h1 class="neon-text">MD NAHID MAHMUD</h1>
+            <h3 class="sub-text">SOUTHEAST UNIVERSITY</h3>
+        </div>
+        """, unsafe_allow_html=True)
         
-    placeholder.empty()
+        time.sleep(3.5) # নাম ৩.৫ সেকেন্ড দেখাবে
+        
+    placeholder.empty() # এরপর মেনু আসবে
 
+# সেশন স্টেট চেক (যাতে রিফ্রেশ দিলে বারবার নাম না আসে, কিন্তু প্রথমবার আসে)
 if 'intro_done' not in st.session_state:
     show_intro()
     st.session_state['intro_done'] = True
 
-# 4. NAVIGATION MENU (Updated & Merged)
+# 4. NAVIGATION MENU
 selected = option_menu(
     menu_title=None,
     options=["Home", "Academic Hub", "Global Wings", "Career Architect"],
@@ -112,11 +126,11 @@ selected = option_menu(
     }
 )
 
-# 5. MAIN LOGIC
+# 5. MAIN LOGIC (আপনার আগের লজিকগুলোই রাখা হয়েছে)
 
 # --- HOME ---
 if selected == "Home":
-    st.markdown("<h1 style='text-align: center; color: #00C9FF;'>Welcome to Global Scholar AI 2.0 🎓</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #00C9FF;'>Welcome to Global Scholar AI 🎓</h1>", unsafe_allow_html=True)
     st.write("---")
     
     col1, col2, col3 = st.columns(3)
@@ -130,10 +144,9 @@ if selected == "Home":
         st.warning("🚀 **Career Architect**")
         st.caption("AI আপনাকে বলে দেবে আপনার ক্যারিয়ারের রোডম্যাপ।")
 
-# --- ACADEMIC HUB (Study Buddy + Quiz Merged) ---
+# --- ACADEMIC HUB ---
 elif selected == "Academic Hub":
     st.title("📚 Academic Hub")
-    
     tab1, tab2 = st.tabs(["📄 Study Material Analyzer", "🧠 AI Quiz Master"])
     
     with tab1:
@@ -148,10 +161,9 @@ elif selected == "Academic Hub":
         if st.button("Generate Quiz"):
             st.write(f"Generating quiz for: **{topic}**...")
 
-# --- GLOBAL WINGS (Universe Explorer + Budget Merged) ---
+# --- GLOBAL WINGS ---
 elif selected == "Global Wings":
     st.title("✈️ Global Wings")
-    
     tab1, tab2 = st.tabs(["🌍 Universe Explorer", "💰 Smart Budget"])
     
     with tab1:
@@ -159,7 +171,7 @@ elif selected == "Global Wings":
         with col1:
             country = st.text_input("Destination Country", placeholder="e.g. Germany")
         with col2:
-            st.write("")
+            st.write("") # spacing
             st.write("")
             st.button("Search Unis 🔍")
             
@@ -171,7 +183,7 @@ elif selected == "Global Wings":
         st.metric("Total Yearly Cost", f"${total}")
         st.progress(min(total/60000, 1.0))
 
-# --- CAREER ARCHITECT (New AI Feature) ---
+# --- CAREER ARCHITECT ---
 elif selected == "Career Architect":
     st.title("🚀 Career Architect AI")
     st.write("আপনার স্বপ্নের জব রোলের জন্য কমপ্লিট গাইডলাইন নিন।")
@@ -183,12 +195,9 @@ elif selected == "Career Architect":
         with st.spinner("AI রোডম্যাপ তৈরি করছে..."):
             time.sleep(2)
             st.subheader(f"Roadmap for {target_role} ({current_level})")
-            
-            # Simulated AI Response
             st.markdown(f"""
-            1. **Month 1-2:** Master the basics of {target_role}.
-            2. **Month 3:** Build 2 real-world projects.
-            3. **Month 4:** Focus on Networking & LinkedIn optimization.
-            4. **Month 5:** Apply for Internships.
+            1. **Month 1-2:** Master the basics.
+            2. **Month 3:** Build real-world projects.
+            3. **Month 4:** LinkedIn optimization.
             """)
             st.balloons()
