@@ -41,7 +41,7 @@ def get_gemini_response(input_prompt, content=""):
             api_key = st.secrets["GOOGLE_API_KEY"]
             genai.configure(api_key=api_key)
             
-            # UPDATED MODEL TO FIX 404 ERROR
+            # Trying the most stable latest model
             model = genai.GenerativeModel('gemini-1.5-flash') 
             
             if content:
@@ -52,9 +52,9 @@ def get_gemini_response(input_prompt, content=""):
         else:
             return "⚠️ System Error: API Key Missing in Secrets."
     except Exception as e:
-        return f"⚠️ AI Engine Error: {str(e)}"
+        return f"⚠️ AI Engine Error: {str(e)} \n\n (Tip: Update 'google-generativeai' in requirements.txt)"
 
-# --- 3. PREMIUM CSS STYLING (Neon Pulse) ---
+# --- 3. PREMIUM CSS STYLING (Neon Pulse - User Favorite) ---
 st.markdown("""
 <style>
     /* Main Background */
@@ -64,7 +64,7 @@ st.markdown("""
         font-family: 'Helvetica Neue', sans-serif;
     }
     
-    /* --- INTRO ANIMATION (User Favorite Neon) --- */
+    /* --- INTRO ANIMATION (PERFECT - DO NOT CHANGE) --- */
     .intro-container {
         height: 90vh;
         display: flex;
@@ -97,24 +97,6 @@ st.markdown("""
         to { text-shadow: 0 0 20px #fff, 0 0 30px #0ea5e9, 0 0 40px #0ea5e9; }
     }
 
-    /* --- DASHBOARD CARDS --- */
-    div.css-1r6slb0 {
-        background: rgba(30, 41, 59, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        padding: 20px;
-    }
-    
-    /* --- GLOBAL WINGS CARDS --- */
-    .metric-card {
-        background-color: #1e293b;
-        border-left: 5px solid #3b82f6;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 10px;
-    }
-
     /* --- BUTTONS --- */
     .stButton > button {
         background: linear-gradient(45deg, #2563eb, #06b6d4);
@@ -123,14 +105,11 @@ st.markdown("""
         padding: 12px 25px;
         font-weight: bold;
         border-radius: 8px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
         width: 100%;
         box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
     }
     .stButton > button:hover {
         box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
-        color: #fff;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -144,7 +123,7 @@ def run_intro():
             <h1 class="neon-name">MD NAHID MAHMUD</h1>
             <h2 class="neon-uni">SOUTHEAST UNIVERSITY</h2>
             <br>
-            <p style="color: gray; font-family: monospace;">INITIALIZING GLOBAL DATABASE...</p>
+            <p style="color: gray; font-family: monospace;">INITIALIZING SYSTEM...</p>
         </div>
         """, unsafe_allow_html=True)
         time.sleep(3.5)
@@ -172,21 +151,17 @@ selected = option_menu(
 
 # ================= HOME DASHBOARD =================
 if selected == "Home Dashboard":
-    # Header
     col_a, col_b = st.columns([3, 1])
     with col_a:
         st.markdown("# 🚀 Student Command Center")
-        st.markdown("### Welcome back, **Nahid**. System Status: **ONLINE**")
+        st.markdown("### System Status: **ONLINE**")
     with col_b:
         st.markdown(f"**Date:** {time.strftime('%Y-%m-%d')}")
-        st.markdown("**Location:** Dhaka, BD")
 
     st.markdown("---")
-
-    # LIVE DATA TICKER
     st.info("🔔 **LIVE UPDATES:** 15 New Scholarships in Canada | Visa Ratio for Germany increased by 12% | Google Hiring Freeze Lifted")
 
-    # STATS & ANIMATION
+    # Animation
     lottie_db = load_lottieurl("https://lottie.host/5a7d51e7-268e-4934-a63e-670560a6136d/6gH7Xy44uT.json")
     
     col1, col2 = st.columns([2, 1])
@@ -195,14 +170,6 @@ if selected == "Home Dashboard":
         c1.metric("Universities Indexed", "25,432", "+15 today")
         c2.metric("Total Scholarships", "$4.2B", "Global")
         c3.metric("AI Models", "Gemini 1.5 Flash", "Active")
-        
-        st.write("")
-        st.write("### ⚡ Quick Modules")
-        qc1, qc2, qc3 = st.columns(3)
-        qc1.success("📚 Study Buddy")
-        qc2.info("✈️ Global Wings")
-        qc3.warning("🚀 Career AI")
-        
     with col2:
         if lottie_db: st_lottie(lottie_db, height=250)
 
@@ -221,7 +188,6 @@ elif selected == "Academic Hub":
         st.error("⚠️ API Key Missing in Secrets.")
     else:
         tab1, tab2 = st.tabs(["📝 Smart Summarizer", "🔥 Exam Generator"])
-        
         with tab1:
             uploaded_file = st.file_uploader("Upload PDF Material", type="pdf")
             mode = st.radio("Summary Depth:", ["Quick Overview", "Detailed Notes", "Explain Like I'm 5"])
@@ -230,7 +196,6 @@ elif selected == "Academic Hub":
                     text = input_pdf_text(uploaded_file)
                     prompt = f"Provide a {mode} of this text. Use bold headings and bullet points."
                     st.markdown(get_gemini_response(prompt, text))
-
         with tab2:
             if uploaded_file:
                 diff = st.select_slider("Difficulty Level", ["Easy", "Medium", "Hard", "Professor Level"])
@@ -240,11 +205,9 @@ elif selected == "Academic Hub":
                         prompt = f"Create 5 {diff} Multiple Choice Questions from the text. Show Answer Key at bottom."
                         st.markdown(get_gemini_response(prompt, text))
 
-# ================= GLOBAL WINGS (BEST UPDATE) =================
+# ================= GLOBAL WINGS (FIXED & ANIMATED) =================
 elif selected == "Global Wings":
     st.title("✈️ Global Wings Premium")
-    
-    # Premium Header Animation
     lottie_plane = load_lottieurl("https://lottie.host/9f5064e6-815d-4f06-b51c-438676d91d83/pT2x6o3s7M.json")
     
     col_head1, col_head2 = st.columns([3, 1])
@@ -255,91 +218,89 @@ elif selected == "Global Wings":
         if lottie_plane: st_lottie(lottie_plane, height=150)
 
     st.markdown("---")
+    
+    # INPUTS
+    c1, c2, c3, c4 = st.columns(4)
+    country = c1.text_input("Destination", placeholder="e.g. Australia")
+    subject = c2.text_input("Major / Subject", placeholder="e.g. CSE")
+    degree = c3.selectbox("Degree Level", ["Bachelor's", "Master's", "PhD"])
+    budget = c4.select_slider("Max Annual Budget", ["$5k", "$15k", "$30k", "Unlimited"])
 
-    # ADVANCED INPUTS
-    with st.container():
-        st.subheader("🔍 Configure Search Parameters")
-        c1, c2, c3, c4 = st.columns(4)
-        
-        country = c1.text_input("Destination", placeholder="e.g. USA, Germany")
-        subject = c2.text_input("Major / Subject", placeholder="e.g. Computer Science")
-        degree = c3.selectbox("Degree Level", ["Bachelor's", "Master's", "PhD"])
-        budget = c4.select_slider("Max Annual Budget", ["$5,000", "$15,000", "$30,000", "Unlimited"])
-
-    # SEARCH BUTTON & LOGIC
     if st.button("🛰️ Initiate Global Scan", use_container_width=True):
         if country and subject:
-            # 1. VISUAL FEEDBACK
-            with st.status("📡 Connecting to Global Education Database...", expanded=True) as status:
-                st.write("Handshaking with University Servers...")
-                time.sleep(1)
-                st.write(f"Filtering {degree} programs in {country}...")
-                time.sleep(1)
-                st.write("Analyzing Scholarship Availability...")
-                time.sleep(0.5)
-                status.update(label="Scan Complete!", state="complete", expanded=False)
-
-            # 2. VISA SUCCESS METER (Simulated AI)
+            # 1. Visa Success Meter
+            prob = np.random.randint(70, 95)
             st.subheader("📊 AI Analysis Report")
-            visa_col1, visa_col2 = st.columns([1, 3])
-            
-            with visa_col1:
-                # Simulated probability based on country (Randomized for demo feel)
-                prob = np.random.randint(70, 95)
-                st.metric(label="Visa Success Probability", value=f"{prob}%", delta="High Chance")
-            
-            with visa_col2:
+            c_meter, c_text = st.columns([3, 1])
+            with c_meter:
                 st.progress(prob)
-                st.caption(f"Based on current immigration trends for {country}.")
-
-            # 3. AI TABLE GENERATION
-            st.subheader(f"🏆 Top University Matches in {country}")
-            with st.spinner("Compiling Final Report..."):
+                st.caption(f"Visa Success Probability for {country}: {prob}%")
+            
+            # 2. Table Result
+            with st.spinner(f"Scanning Universities in {country}..."):
                 prompt = f"""
-                Act as a senior education consultant. Find top 5 universities in {country} for {degree} in {subject} (Budget around {budget}).
-                
-                Strictly output a MARKDOWN TABLE with these columns:
-                | Global Rank | University Name | Tuition (Yearly) | IELTS/TOEFL Req | Scholarship Name | Scholarship Amount |
-                |---|---|---|---|---|---|
-                
-                After the table, provide 3 bullet points on 'Why these are the best fit'.
+                Find top 5 universities in {country} for {degree} in {subject} (Budget: {budget}).
+                Output a MARKDOWN TABLE with columns:
+                | Global Rank | University Name | Tuition (Yearly) | IELTS/TOEFL Req | Scholarship Name |
+                |---|---|---|---|---|
+                After table, add 3 bullet points on 'Why apply here?'.
                 """
                 st.markdown(get_gemini_response(prompt))
-                
         else:
-            st.warning("⚠️ Please enter a Country and Subject to start the scan.")
+            st.warning("Please enter Destination and Major.")
 
-# ================= CAREER ARCHITECT =================
+# ================= CAREER ARCHITECT (RESTORED + UPGRADED) =================
 elif selected == "Career Architect":
     st.title("🚀 Career Architect AI")
+    
     lottie_career = load_lottieurl("https://lottie.host/0200c5a2-9428-494b-85d7-1b20347895f3/Xf3s6j2r8v.json")
     
     col_intro, col_anim = st.columns([2, 1])
     with col_intro:
+        st.markdown("### 📈 Strategic Career Planning")
         st.write("Don't just guess. Let AI architect your path to top-tier companies like Google, Microsoft, and Tesla.")
+        st.info("💡 **Features:** Roadmap Generator + Market Salary Analysis")
     with col_anim:
         if lottie_career: st_lottie(lottie_career, height=180)
 
-    with st.expander("👤 Profile Configuration", expanded=True):
-        c1, c2 = st.columns(2)
-        target_role = c1.text_input("Target Job Role", placeholder="e.g. Machine Learning Engineer")
-        timeline = c2.select_slider("Goal Timeline", options=["3 Months", "6 Months", "1 Year"])
+    st.divider()
 
-    if st.button("🚀 Generate Blueprint"):
+    # --- RESTORED USER FRIENDLY INPUTS ---
+    st.subheader("👤 Profile Configuration")
+    
+    c1, c2 = st.columns(2)
+    target_role = c1.text_input("Target Job Role", placeholder="e.g. Data Scientist")
+    current_status = c2.selectbox("Current Status", ["Freshman", "Sophomore", "Junior", "Senior", "Fresh Graduate"])
+    
+    c3, c4 = st.columns(2)
+    target_company = c3.text_input("Dream Company (Optional)", placeholder="e.g. Google")
+    timeline = c4.select_slider("Goal Timeline", options=["3 Months", "6 Months", "1 Year"])
+
+    if st.button("🚀 Generate Blueprint", use_container_width=True):
         if target_role:
-            # Chart Visualization
+            # 1. MARKET ANALYSIS (New Feature - Kept as per request)
             st.subheader(f"📊 Market Trends: {target_role}")
-            chart_data = pd.DataFrame(np.random.randint(60, 100, size=(12, 1)), columns=["Demand Score"])
-            st.line_chart(chart_data)
+            chart_col1, chart_col2 = st.columns(2)
+            with chart_col1:
+                st.write("**💰 Projected Salary Growth**")
+                chart_data = pd.DataFrame(np.random.randint(50000, 150000, size=(6, 1)), columns=["Salary ($)"])
+                st.line_chart(chart_data)
+            with chart_col2:
+                 st.write("**🔥 Hiring Demand**")
+                 st.bar_chart({"Demand": [70, 80, 85, 90, 95]})
 
-            # AI Logic
-            with st.spinner("AI is analyzing successful career paths..."):
+            # 2. ROADMAP (Restored Logic)
+            st.divider()
+            st.subheader("🗺️ Your Personalized Execution Plan")
+            with st.spinner("AI is architecting your path..."):
                 prompt = f"""
-                Create a detailed {timeline} roadmap for {target_role}.
+                Create a detailed {timeline} roadmap for a {current_status} aiming for {target_role} at {target_company}.
+                
                 Structure:
-                1. **Skill Gap Analysis**
-                2. **Month-by-Month Plan**
-                3. **Project Ideas**
+                1. **Skill Gap Analysis**: What they likely know vs what they NEED.
+                2. **Month-by-Month Plan**: Specific topics, projects, and resources.
+                3. **Project Ideas**: 2 Portfolio-ready project titles with descriptions.
+                4. **Certification Guide**: Best certificates for this role.
                 """
                 st.markdown(get_gemini_response(prompt))
         else:
