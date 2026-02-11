@@ -41,7 +41,7 @@ def get_gemini_response(input_prompt, content=""):
             api_key = st.secrets["GOOGLE_API_KEY"]
             genai.configure(api_key=api_key)
             
-            # Trying the most stable latest model
+            # Using the latest model
             model = genai.GenerativeModel('gemini-1.5-flash') 
             
             if content:
@@ -52,19 +52,18 @@ def get_gemini_response(input_prompt, content=""):
         else:
             return "⚠️ System Error: API Key Missing in Secrets."
     except Exception as e:
-        return f"⚠️ AI Engine Error: {str(e)} \n\n (Tip: Update 'google-generativeai' in requirements.txt)"
+        return f"⚠️ AI Error: {str(e)} (Check requirements.txt)"
 
-# --- 3. PREMIUM CSS STYLING (Neon Pulse - User Favorite) ---
+# --- 3. PREMIUM CSS STYLING ---
 st.markdown("""
 <style>
-    /* Main Background */
     .stApp {
         background: linear-gradient(to bottom, #0f172a, #020617);
         color: #e2e8f0;
         font-family: 'Helvetica Neue', sans-serif;
     }
     
-    /* --- INTRO ANIMATION (PERFECT - DO NOT CHANGE) --- */
+    /* Neon Pulse Intro */
     .intro-container {
         height: 90vh;
         display: flex;
@@ -97,7 +96,7 @@ st.markdown("""
         to { text-shadow: 0 0 20px #fff, 0 0 30px #0ea5e9, 0 0 40px #0ea5e9; }
     }
 
-    /* --- BUTTONS --- */
+    /* Buttons */
     .stButton > button {
         background: linear-gradient(45deg, #2563eb, #06b6d4);
         color: white;
@@ -114,7 +113,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 4. INTRO ANIMATION EXECUTION ---
+# --- 4. INTRO ANIMATION ---
 def run_intro():
     placeholder = st.empty()
     with placeholder.container():
@@ -123,7 +122,7 @@ def run_intro():
             <h1 class="neon-name">MD NAHID MAHMUD</h1>
             <h2 class="neon-uni">SOUTHEAST UNIVERSITY</h2>
             <br>
-            <p style="color: gray; font-family: monospace;">INITIALIZING SYSTEM...</p>
+            <p style="color: gray; font-family: monospace;">INITIALIZING GLOBAL DATABASE...</p>
         </div>
         """, unsafe_allow_html=True)
         time.sleep(3.5)
@@ -133,7 +132,7 @@ if 'intro_shown' not in st.session_state:
     run_intro()
     st.session_state['intro_shown'] = True
 
-# --- 5. TOP NAVIGATION MENU ---
+# --- 5. NAVIGATION MENU ---
 selected = option_menu(
     menu_title=None,
     options=["Home Dashboard", "Academic Hub", "Global Wings", "Career Architect"],
@@ -147,7 +146,7 @@ selected = option_menu(
     }
 )
 
-# --- 6. MAIN CONTENT SECTIONS ---
+# --- 6. MAIN CONTENT ---
 
 # ================= HOME DASHBOARD =================
 if selected == "Home Dashboard":
@@ -159,17 +158,15 @@ if selected == "Home Dashboard":
         st.markdown(f"**Date:** {time.strftime('%Y-%m-%d')}")
 
     st.markdown("---")
-    st.info("🔔 **LIVE UPDATES:** 15 New Scholarships in Canada | Visa Ratio for Germany increased by 12% | Google Hiring Freeze Lifted")
+    st.info("🔔 **LIVE:** 25 New Scholarships Added | Harvard Acceptance Rate Update | Visa Policies Changed for UK")
 
-    # Animation
     lottie_db = load_lottieurl("https://lottie.host/5a7d51e7-268e-4934-a63e-670560a6136d/6gH7Xy44uT.json")
-    
     col1, col2 = st.columns([2, 1])
     with col1:
         c1, c2, c3 = st.columns(3)
-        c1.metric("Universities Indexed", "25,432", "+15 today")
-        c2.metric("Total Scholarships", "$4.2B", "Global")
-        c3.metric("AI Models", "Gemini 1.5 Flash", "Active")
+        c1.metric("Universities Indexed", "25,432", "+15")
+        c2.metric("Total Scholarships", "$4.2B", "Active")
+        c3.metric("AI Engine", "Gemini 1.5 Flash", "Online")
     with col2:
         if lottie_db: st_lottie(lottie_db, height=250)
 
@@ -178,130 +175,135 @@ elif selected == "Academic Hub":
     st.title("📚 Academic Hub Pro")
     lottie_study = load_lottieurl("https://lottie.host/9364951b-5262-4299-8d7b-402eb0656a81/w53e7XF0oN.json")
     
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        st.write("Upload lecture slides or books. The AI will break it down into Summaries or generate Exams.")
-    with col2:
+    c1, c2 = st.columns([2, 1])
+    with c1:
+        st.write("Upload lecture slides or books. AI will Summarize or Generate Exams.")
+    with c2:
         if lottie_study: st_lottie(lottie_study, height=150)
 
     if "GOOGLE_API_KEY" not in st.secrets:
-        st.error("⚠️ API Key Missing in Secrets.")
+        st.error("⚠️ API Key Missing")
     else:
         tab1, tab2 = st.tabs(["📝 Smart Summarizer", "🔥 Exam Generator"])
         with tab1:
-            uploaded_file = st.file_uploader("Upload PDF Material", type="pdf")
-            mode = st.radio("Summary Depth:", ["Quick Overview", "Detailed Notes", "Explain Like I'm 5"])
-            if uploaded_file and st.button("Analyze Document"):
-                with st.spinner("Processing Knowledge Base..."):
+            uploaded_file = st.file_uploader("Upload PDF", type="pdf")
+            mode = st.radio("Mode:", ["Quick Overview", "Detailed Notes", "Explain Like I'm 5"])
+            if uploaded_file and st.button("Analyze"):
+                with st.spinner("Processing..."):
                     text = input_pdf_text(uploaded_file)
-                    prompt = f"Provide a {mode} of this text. Use bold headings and bullet points."
-                    st.markdown(get_gemini_response(prompt, text))
+                    st.markdown(get_gemini_response(f"Provide a {mode} of this text.", text))
         with tab2:
             if uploaded_file:
-                diff = st.select_slider("Difficulty Level", ["Easy", "Medium", "Hard", "Professor Level"])
+                diff = st.select_slider("Difficulty", ["Easy", "Medium", "Hard"])
                 if st.button("Create Exam"):
-                    with st.spinner(f"Generating {diff} Questions..."):
+                    with st.spinner("Generating..."):
                         text = input_pdf_text(uploaded_file)
-                        prompt = f"Create 5 {diff} Multiple Choice Questions from the text. Show Answer Key at bottom."
-                        st.markdown(get_gemini_response(prompt, text))
+                        st.markdown(get_gemini_response(f"Create 5 {diff} MCQs with answers.", text))
 
-# ================= GLOBAL WINGS (FIXED & ANIMATED) =================
+# ================= GLOBAL WINGS (SUPER UPDATE) =================
 elif selected == "Global Wings":
     st.title("✈️ Global Wings Premium")
     lottie_plane = load_lottieurl("https://lottie.host/9f5064e6-815d-4f06-b51c-438676d91d83/pT2x6o3s7M.json")
     
     col_head1, col_head2 = st.columns([3, 1])
     with col_head1:
-        st.markdown("### 🌍 The Ultimate University Finder")
-        st.write("Access real-time tuition fees, scholarship data, and visa success predictions.")
+        st.markdown("### 🌍 The Ultimate University Database")
+        st.write("First select a country to load universities, then get detailed analysis.")
     with col_head2:
         if lottie_plane: st_lottie(lottie_plane, height=150)
 
     st.markdown("---")
+
+    # STEP 1: SELECT COUNTRY
+    st.subheader("📍 Step 1: Select Destination")
+    country = st.text_input("Enter Country Name", placeholder="e.g. USA, Canada, Germany")
     
-    # INPUTS
-    c1, c2, c3, c4 = st.columns(4)
-    country = c1.text_input("Destination", placeholder="e.g. Australia")
-    subject = c2.text_input("Major / Subject", placeholder="e.g. CSE")
-    degree = c3.selectbox("Degree Level", ["Bachelor's", "Master's", "PhD"])
-    budget = c4.select_slider("Max Annual Budget", ["$5k", "$15k", "$30k", "Unlimited"])
+    # Session state to store universities list
+    if 'uni_list' not in st.session_state:
+        st.session_state.uni_list = []
 
-    if st.button("🛰️ Initiate Global Scan", use_container_width=True):
-        if country and subject:
-            # 1. Visa Success Meter
-            prob = np.random.randint(70, 95)
-            st.subheader("📊 AI Analysis Report")
-            c_meter, c_text = st.columns([3, 1])
-            with c_meter:
-                st.progress(prob)
-                st.caption(f"Visa Success Probability for {country}: {prob}%")
-            
-            # 2. Table Result
-            with st.spinner(f"Scanning Universities in {country}..."):
-                prompt = f"""
-                Find top 5 universities in {country} for {degree} in {subject} (Budget: {budget}).
-                Output a MARKDOWN TABLE with columns:
-                | Global Rank | University Name | Tuition (Yearly) | IELTS/TOEFL Req | Scholarship Name |
-                |---|---|---|---|---|
-                After table, add 3 bullet points on 'Why apply here?'.
-                """
-                st.markdown(get_gemini_response(prompt))
+    if st.button("🔍 Load Universities"):
+        if country:
+            with st.spinner(f"Connecting to {country} Education Database..."):
+                # AI Generates the list of universities
+                prompt = f"List top 25 most popular universities in {country}. Just give me the names separated by commas."
+                response = get_gemini_response(prompt)
+                # Cleaning the list
+                uni_raw = response.replace("*", "").split(",")
+                st.session_state.uni_list = [u.strip() for u in uni_raw if u.strip()]
+                st.success(f"✅ Loaded {len(st.session_state.uni_list)} Universities from {country}")
         else:
-            st.warning("Please enter Destination and Major.")
+            st.warning("Please enter a country name first.")
 
-# ================= CAREER ARCHITECT (RESTORED + UPGRADED) =================
+    # STEP 2: SELECT UNIVERSITY & SUBJECT
+    if st.session_state.uni_list:
+        st.divider()
+        st.subheader("🏫 Step 2: Choose University & Subject")
+        
+        col1, col2 = st.columns(2)
+        selected_uni = col1.selectbox("Select University", st.session_state.uni_list)
+        subject = col2.text_input("Enter Your Subject", placeholder="e.g. Computer Science")
+        
+        if st.button("📊 Get Full University Report"):
+            if selected_uni and subject:
+                with st.spinner(f"Retrieving confidential data for {selected_uni}..."):
+                    prompt = f"""
+                    Act as a senior admission consultant. Provide a detailed report for:
+                    University: {selected_uni}
+                    Subject: {subject}
+                    Country: {country}
+
+                    Please provide the output in this EXACT format:
+                    
+                    ### 🏛️ {selected_uni} Analysis
+                    
+                    **1. Financial Overview:**
+                    * **Tuition Fee (Approx):** [Amount in USD/Local Currency]
+                    * **Living Cost:** [Amount per month]
+                    * **Scholarship Opportunities:** [List 2-3 specific scholarships]
+
+                    **2. Academic Details:**
+                    * **Global Ranking:** [Approx Rank]
+                    * **Acceptance Rate:** [Percentage]
+                    * **IELTS/TOEFL Requirement:** [Score]
+
+                    **3. Why Study Here?**
+                    [Provide 3 strong reasons]
+
+                    **4. Important Warning/Tip:**
+                    [One crucial piece of advice for international students]
+                    """
+                    st.markdown(get_gemini_response(prompt))
+            else:
+                st.warning("Please select a university and enter a subject.")
+
+# ================= CAREER ARCHITECT =================
 elif selected == "Career Architect":
     st.title("🚀 Career Architect AI")
-    
     lottie_career = load_lottieurl("https://lottie.host/0200c5a2-9428-494b-85d7-1b20347895f3/Xf3s6j2r8v.json")
     
-    col_intro, col_anim = st.columns([2, 1])
-    with col_intro:
+    c1, c2 = st.columns([2, 1])
+    with c1:
         st.markdown("### 📈 Strategic Career Planning")
-        st.write("Don't just guess. Let AI architect your path to top-tier companies like Google, Microsoft, and Tesla.")
-        st.info("💡 **Features:** Roadmap Generator + Market Salary Analysis")
-    with col_anim:
+        st.write("AI-Powered Roadmap Generator & Market Analysis.")
+    with c2:
         if lottie_career: st_lottie(lottie_career, height=180)
 
     st.divider()
-
-    # --- RESTORED USER FRIENDLY INPUTS ---
-    st.subheader("👤 Profile Configuration")
     
-    c1, c2 = st.columns(2)
-    target_role = c1.text_input("Target Job Role", placeholder="e.g. Data Scientist")
-    current_status = c2.selectbox("Current Status", ["Freshman", "Sophomore", "Junior", "Senior", "Fresh Graduate"])
-    
-    c3, c4 = st.columns(2)
-    target_company = c3.text_input("Dream Company (Optional)", placeholder="e.g. Google")
-    timeline = c4.select_slider("Goal Timeline", options=["3 Months", "6 Months", "1 Year"])
+    with st.expander("👤 Configure Profile", expanded=True):
+        col1, col2 = st.columns(2)
+        target_role = col1.text_input("Target Role", placeholder="e.g. Data Scientist")
+        timeline = col2.select_slider("Timeline", ["3 Months", "6 Months", "1 Year"])
 
-    if st.button("🚀 Generate Blueprint", use_container_width=True):
+    if st.button("🚀 Generate Blueprint"):
         if target_role:
-            # 1. MARKET ANALYSIS (New Feature - Kept as per request)
             st.subheader(f"📊 Market Trends: {target_role}")
-            chart_col1, chart_col2 = st.columns(2)
-            with chart_col1:
-                st.write("**💰 Projected Salary Growth**")
-                chart_data = pd.DataFrame(np.random.randint(50000, 150000, size=(6, 1)), columns=["Salary ($)"])
-                st.line_chart(chart_data)
-            with chart_col2:
-                 st.write("**🔥 Hiring Demand**")
-                 st.bar_chart({"Demand": [70, 80, 85, 90, 95]})
-
-            # 2. ROADMAP (Restored Logic)
-            st.divider()
-            st.subheader("🗺️ Your Personalized Execution Plan")
-            with st.spinner("AI is architecting your path..."):
-                prompt = f"""
-                Create a detailed {timeline} roadmap for a {current_status} aiming for {target_role} at {target_company}.
-                
-                Structure:
-                1. **Skill Gap Analysis**: What they likely know vs what they NEED.
-                2. **Month-by-Month Plan**: Specific topics, projects, and resources.
-                3. **Project Ideas**: 2 Portfolio-ready project titles with descriptions.
-                4. **Certification Guide**: Best certificates for this role.
-                """
+            chart_data = pd.DataFrame(np.random.randint(50000, 150000, size=(6, 1)), columns=["Salary Growth"])
+            st.line_chart(chart_data)
+            
+            with st.spinner("Architecting Path..."):
+                prompt = f"Create a {timeline} roadmap for {target_role}. Include Skill Gap, Projects, and Certifications."
                 st.markdown(get_gemini_response(prompt))
         else:
-            st.warning("⚠️ Please enter a Target Job Role.")
+            st.warning("Enter a job role.")
